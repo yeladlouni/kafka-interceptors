@@ -1,39 +1,18 @@
-import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 
-import java.util.Map;
 import java.util.Properties;
 
-public class ExampleProducer implements ProducerInterceptor<String, String> {
-    @Override
-    public ProducerRecord<String, String> onSend(ProducerRecord<String, String> record) {
-        System.out.println("onSend");
-        return record;
-    }
-
-    @Override
-    public void onAcknowledgement(RecordMetadata metadata, Exception exception) {
-        System.out.println("onAcknowledgement");
-    }
-
-    @Override
-    public void close() {
-
-    }
-
-    @Override
-    public void configure(Map<String, ?> configs) {
-
-    }
-
+public class Example {
     KafkaProducer<String, String> producer;
-
-
-    public ExampleProducer() {
+    public Example() {
         Properties props = new Properties();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        props.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, ExampleProducerInterceptor.class.getName());
 
         producer = new KafkaProducer<>(props);
         String topic = "kafka-interceptors";
@@ -42,10 +21,9 @@ public class ExampleProducer implements ProducerInterceptor<String, String> {
             ProducerRecord<String, String> record = new ProducerRecord<>(topic, "key-" + i, "value-" + i);
             producer.send(record);
         }
-
     }
 
     public static void main(String[] args) {
-        new ExampleProducer();
+        new Example();
     }
 }
