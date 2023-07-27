@@ -2,7 +2,7 @@ Ecrire une application Java:
 
 * charger les produits contenus dans le json sur le topic products
 
-https://gist.github.com/hi2rashid/70abc438d2f3438ccd269c9db47bdeac
+https://github.com/GoogleChromeLabs/sample-pie-shop/blob/master/src/data/products.json
 
 
 * Créer un topic max-price contenant le max du prix par catégorie
